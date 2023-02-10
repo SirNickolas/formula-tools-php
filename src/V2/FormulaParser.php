@@ -239,8 +239,9 @@ class FormulaParser implements IParser
         assert(!(bool)$this->resultStack); // We are not reenterable.
         assert(!(bool)$this->opStack);
         $waitingForTerm = true;
+        $this->position = 0;
         try {
-            foreach ($tokens as $this->position => $token) {
+            foreach ($tokens as $token) {
                 if ($waitingForTerm) {
                     if ($this->acceptTerm($token)) {
                         $waitingForTerm = false;
@@ -248,6 +249,7 @@ class FormulaParser implements IParser
                 } elseif ($this->acceptBinaryOp($token)) {
                     $waitingForTerm = true;
                 }
+                $this->position++;
             }
 
             if ($waitingForTerm) {
